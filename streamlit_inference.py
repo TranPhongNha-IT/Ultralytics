@@ -188,18 +188,18 @@ class Inference:
 
         if self.st.sidebar.button("Start"):
             stop_button = self.st.button("Stop")  # Button to stop the inference
-            cap = cv2.VideoCapture(self.vid_file_name)  # Capture the video
-            if not cap.isOpened():
-               self.st.error("Could not open webcam or video source.")
-               return
-            # try:
-            #     cap = cv2.VideoCapture(self.vid_file_name)
-            #     if not cap.isOpened():
-            #         self.st.error("⚠️ Could not open webcam or video source. If you're on Streamlit Cloud, webcam is not supported.")
-            #         return
-            # except Exception as e:
-            #     self.st.error(f"❌ Error initializing video source: {e}")
-            #     return
+            # cap = cv2.VideoCapture(self.vid_file_name)  # Capture the video
+            # if not cap.isOpened():
+            #    self.st.error("Could not open webcam or video source.")
+            #    return
+            try:
+                cap = cv2.VideoCapture(self.vid_file_name)
+                if not cap.isOpened():
+                    self.st.error("⚠️ Could not open webcam or video source. If you're on Streamlit Cloud, webcam is not supported.")
+                    return
+            except Exception as e:
+                self.st.error(f"❌ Error initializing video source: {e}")
+                return
 
             while cap.isOpened():
                 success, frame = cap.read()
@@ -225,11 +225,12 @@ class Inference:
                 self.ann_frame.image(annotated_frame, channels="BGR")  # Display processed frame
 
             cap.release()  # Release the capture
-       cv2.destroyAllWindows()  # Destroy all OpenCV windows
-            # try:
-            #     cv2.destroyAllWindows()
-            # except Exception:
-            #     pass  # Safe fallback for headless environments
+            try:
+                cv2.destroyAllWindows()
+            except Exception:
+                pass  # Safe fallback for headless environments
+       # cv2.destroyAllWindows()  # Destroy all OpenCV windows
+
 
 
 if __name__ == "__main__":
