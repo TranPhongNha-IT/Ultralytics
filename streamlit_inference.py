@@ -1,6 +1,7 @@
 # # Ultralytics 🚀 AGPL-3.0 License - https://ultralytics.com/license
 
 import io
+import streamlit as st
 from typing import Any
 from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
 import av
@@ -11,9 +12,16 @@ from ultralytics.utils import LOGGER
 from ultralytics.utils.checks import check_requirements
 from ultralytics.utils.downloads import GITHUB_ASSETS_STEMS
 
+
+
+# ⚠️ Đặt lệnh này TRÊN CÙNG trước mọi thứ liên quan tới Streamlit
+st.set_page_config(page_title="Ultralytics Streamlit App", layout="wide")
+
+
+# Class xử lý video từ webcam (qua trình duyệt)
 class VideoProcessor(VideoTransformerBase):
     def __init__(self):
-        self.model = YOLO("yolo11n.pt")  # hoặc tên model bạn muốn
+        self.model = YOLO("yolo11n.pt")  # Đảm bảo model này có sẵn trong repo
 
     def transform(self, frame):
         img = frame.to_ndarray(format="bgr24")
@@ -21,7 +29,21 @@ class VideoProcessor(VideoTransformerBase):
         annotated = results[0].plot()
         return annotated
 
-webrtc_streamer(key="yolo-demo", video_transformer_factory=VideoProcessor)
+
+# Giao diện chính
+def main():
+    st.title("🚀 Ultralytics YOLO Streamlit App")
+    st.markdown("""
+    <style>
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+    </style>
+    """, unsafe_allow_html=True)
+
+    st.subheader("🎥 Realtime Object Detection via Webcam (streamlit-webrtc)")
+    st.info("Model used: `yolo11n.pt` (place this file in the repo)")
+
+    webrtc_streamer(key="yolo-demo", video_transformer_factory=VideoProcessor)
 
 class Inference:
     """
