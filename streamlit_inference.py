@@ -229,6 +229,7 @@ class Inference:
                 cv2.destroyAllWindows()
             except Exception:
                 pass  # Safe fallback for headless environments
+            
        # cv2.destroyAllWindows()  # Destroy all OpenCV windows
 
 
