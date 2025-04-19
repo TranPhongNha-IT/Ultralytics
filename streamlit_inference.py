@@ -13,7 +13,7 @@ from ultralytics.utils.downloads import GITHUB_ASSETS_STEMS
 
 class VideoProcessor(VideoTransformerBase):
     def __init__(self):
-        self.model = YOLO("yolo11n.pt")  # Đảm bảo yolo11n.pt đã có trong thư mục gốc
+        self.model = YOLO("yolo11n.pt")  # hoặc tên model bạn muốn
 
     def transform(self, frame):
         img = frame.to_ndarray(format="bgr24")
@@ -21,16 +21,7 @@ class VideoProcessor(VideoTransformerBase):
         annotated = results[0].plot()
         return annotated
 
-
-def main():
-    st.set_page_config(page_title="YOLO + Webcam", layout="centered")
-    st.title("🎥 Real-time YOLO Inference with Streamlit + WebRTC")
-
-    st.markdown("📦 Model: `yolo11n.pt` (Ultralytics)\n\n"
-                "🔍 Uses `streamlit-webrtc` for webcam input\n\n"
-                "✅ Compatible with Streamlit Cloud")
-
-    webrtc_streamer(key="yolo-stream", video_transformer_factory=VideoProcessor)
+webrtc_streamer(key="yolo-demo", video_transformer_factory=VideoProcessor)
 
 class Inference:
     """
