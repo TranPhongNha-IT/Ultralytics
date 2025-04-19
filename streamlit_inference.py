@@ -159,13 +159,13 @@ class Inference:
             #    self.st.error("Could not open webcam or video source.")
             #    return
             try:
-            cap = cv2.VideoCapture(self.vid_file_name)
-            if not cap.isOpened():
-                self.st.error("⚠️ Could not open webcam or video source. If you're on Streamlit Cloud, webcam is not supported.")
+                cap = cv2.VideoCapture(self.vid_file_name)
+                if not cap.isOpened():
+                    self.st.error("⚠️ Could not open webcam or video source. If you're on Streamlit Cloud, webcam is not supported.")
+                    return
+            except Exception as e:
+                self.st.error(f"❌ Error initializing video source: {e}")
                 return
-        except Exception as e:
-            self.st.error(f"❌ Error initializing video source: {e}")
-            return
 
             while cap.isOpened():
                 success, frame = cap.read()
