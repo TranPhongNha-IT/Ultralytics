@@ -2,7 +2,8 @@
 
 import io
 from typing import Any
-
+from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
+import av
 import cv2
 
 from ultralytics import YOLO
@@ -10,6 +11,17 @@ from ultralytics.utils import LOGGER
 from ultralytics.utils.checks import check_requirements
 from ultralytics.utils.downloads import GITHUB_ASSETS_STEMS
 
+class VideoProcessor(VideoTransformerBase):
+    def __init__(self):
+        self.model = YOLO("yolo11n.pt")  # hoặc tên model bạn muốn
+
+    def transform(self, frame):
+        img = frame.to_ndarray(format="bgr24")
+        results = self.model(img)
+        annotated = results[0].plot()
+        return annotated
+
+webrtc_streamer(key="yolo-demo", video_transformer_factory=VideoProcessor)
 
 class Inference:
     """
